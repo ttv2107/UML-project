@@ -24,6 +24,12 @@ theoretical global optima and gives no explanation as to what happens when the m
 comes to the true data distribution as a function of sample size, is dearly needed. These questions have still not been completely and satisfactorily answered, although some more recent (2017 and 2018) papers
 do try to address these issues. We will look at these newer results and try to extend them or at the very least present a complete picture of them.
 
+The authors of \cite{NIPS2017_7240} consider the convergence of real life GANs training. As mentioned before, in practice it is impossible to have arbitrarily complex generative and discriminative. This means
+that many local Nash equilibriums could exist. Furthermore, since GANs is formulated as a two player game in which the players have competing goals, techniques like gradient descent could fail to converge at all.
+The authors of \cite{NIPS2017_7240} show that by using a two time scale update rule (TTUR), where the discriminator is updated more often than the generator, one can prove that the training of GANs 
+with TTUR and Adam will converge to 
+a stationary local Nash equilibrium. The authors also propose the ``Frechet Inception Distance'' (FID) as a new and more consistent way to evaluate GANs.
+
 \bibliographystyle{ieeetr}
 \bibliography{references} 
 \end{document} 
