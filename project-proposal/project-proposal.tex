@@ -13,10 +13,17 @@
 \assignmentName{Project Proposal}
 \collab{}
 
-\addbibresource{references}
 \begin{document}
 \maketitle
 
+The seminal work done in \cite{NIPS2014_5423} proposes a novel architecture, GANs, for estimating generative models. In addition to describing the model and giving some experimental performances, 
+this work shows that the global optima in the space of arbitrary generative and discriminative functions is that where the generator perfectly learns the data distribution and the discriminator is 
+the naive 0.5 random guesser. However, this leaves unanswered two main more important questions. First, the results only apply when the discriminative and generative functions are arbitrarily powerful 
+(i.e. as stated in \cite{NIPS2014_5423} it applies only in the ''non-parametric limit''). What happens when we use depth and size limited neural networks instead? Second, this paper looks at the 
+theoretical global optima and gives no explanation as to what happens when the model is trained on finitely many samples. Some sort of generalization guarantee, i.e. how close the generator's distribution 
+comes to the true data distribution as a function of sample size, is dearly needed. These questions have still not been completely and satisfactorily answered, although some more recent (2017 and 2018) papers
+do try to address these issues. We will look at these newer results and try to extend them or at the very least present a complete picture of them.
 
-
+\bibliographystyle{ieeetr}
+\bibliography{references} 
 \end{document} 
