@@ -16,22 +16,35 @@
 \begin{document}
 \maketitle
 
-The seminal work done in \cite{NIPS2014_5423} proposes a novel architecture, GANs, for estimating generative models. In addition to describing the model and giving some experimental performances, 
-this work shows that the global optima in the space of arbitrary generative and discriminative functions is that where the generator perfectly learns the data distribution and the discriminator is 
-the naive 0.5 random guesser. However, this leaves unanswered two main more important questions. First, the results only apply when the discriminative and generative functions are arbitrarily powerful 
-(i.e. as stated in \cite{NIPS2014_5423} it applies only in the ''non-parametric limit''). What happens when we use depth and size limited neural networks instead? Second, this paper looks at the 
-theoretical global optima and gives no explanation as to what happens when the model is trained on finitely many samples. Some sort of generalization guarantee, i.e. how close the generator's distribution 
+The seminal work done in \cite{NIPS2014_5423} proposes a novel architecture, GANs, for estimating generative models. In addition to describing the model and giving some experimental performances,
+this work shows that the global optima in the space of arbitrary generative and discriminative functions is that where the generator perfectly learns the data distribution and the discriminator is
+the naive 0.5 random guesser. However, this leaves unanswered two main more important questions. First, the results only apply when the discriminative and generative functions are arbitrarily powerful
+(i.e. as stated in \cite{NIPS2014_5423} it applies only in the ''non-parametric limit''). What happens when we use depth and size limited neural networks instead? Second, this paper looks at the
+theoretical global optima and gives no explanation as to what happens when the model is trained on finitely many samples. Some sort of generalization guarantee, i.e. how close the generator's distribution
 comes to the true data distribution as a function of sample size, is dearly needed. These questions have still not been completely and satisfactorily answered, although some more recent (2017 and 2018) papers
 do try to address these issues. We will look at these newer results and try to extend them or at the very least present a complete picture of them.
 
 The authors of \cite{NIPS2017_7240} consider the convergence of real life GANs training. As mentioned before, in practice it is impossible to have arbitrarily complex generative and discriminative. This means
 that many local Nash equilibriums could exist. Furthermore, since GANs is formulated as a two player game in which the players have competing goals, techniques like gradient descent could fail to converge at all.
-The authors of \cite{NIPS2017_7240} show that by using a two time scale update rule (TTUR), where the discriminator is updated more often than the generator, one can prove that the training of GANs 
-with TTUR and Adam will converge to 
+The authors of \cite{NIPS2017_7240} show that by using a two time scale update rule (TTUR), where the discriminator is updated more often than the generator, one can prove that the training of GANs
+with TTUR and Adam will converge to
 a stationary local Nash equilibrium. The authors also propose the ``Frechet Inception Distance'' (FID) as a new and more consistent way to evaluate GANs.
+
+The authors of \cite{arora2017generalization} pose two questions. First, it tackles the finite sample case. How many examples do we need in order for the empirical distance between the
+generated distribution and the empirical distribution converge to the population distance, and
+under what distance does convergence hold? The answer is that there is a notion of distance, defined as neural network distance, that allows convergence, but this notion
+of distance is so weak that even when it is small, it is hard to conclude that the generated and true distributions are actually close.
+Second, it tackles the assumption of infinite power in $\cite{NIPS2014_5423}$. It shows that a generator with finite capacity can
+still win against a discriminator with finite power -- thus explaining why optimization halts in practice.
+
+\cite{arora2018do} addresses an issue raised by \cite{arora2017generalization}: since the neural network distance converges even
+if the generated distribution is not close to the true distribution: specifically, it might converge even if the generated
+distribution has small support -- leading to a phenomenon called mode collapse and a lack of diversity in the generated
+examples. Thus it proposes test based on the Birthday Paradox: if a distribution has small support then a random
+batch will most likely contain duplicates.
 
 Work has been done to find provable guarantees to GANs under certain conditions. The authors of \cite{zhang2018on} render GANs' performance into a trade-off between the discriminative and generative power of the network, and provide theoretical guarantees on the discriminative powers of the network in case the discriminators are dense enough span the set of bounded continuous functions; on the other hand, the generative powers are guaranteed when the discriminator set is small enough. They provide a metric called \textit{neural distance} as a way to quantify such an upper bound. The authors of \cite{liu2017approximation} elaborates on the convergence rate of GANs given characteristics of the objective function: if the objective function satisfies \textit{strict adversarial divergence}, the there is a weak convergence of the GAN output distribution to the objective function.
 
 \bibliographystyle{ieeetr}
-\bibliography{references} 
-\end{document} 
+\bibliography{references}
+\end{document}
