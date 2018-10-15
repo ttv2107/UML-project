@@ -30,6 +30,8 @@ The authors of \cite{NIPS2017_7240} show that by using a two time scale update r
 with TTUR and Adam will converge to 
 a stationary local Nash equilibrium. The authors also propose the ``Frechet Inception Distance'' (FID) as a new and more consistent way to evaluate GANs.
 
+Work has been done to find provable guarantees to GANs under certain conditions. The authors of \cite{zhang2018on} render GANs' performance into a trade-off between the discriminative and generative power of the network, and provide theoretical guarantees on the discriminative powers of the network in case the discriminators are dense enough span the set of bounded continuous functions; on the other hand, the generative powers are guaranteed when the discriminator set is small enough. They provide a metric called \textit{neural distance} as a way to quantify such an upper bound. The authors of \cite{liu2017approximation} elaborates on the convergence rate of GANs given characteristics of the objective function: if the objective function satisfies \textit{strict adversarial divergence}, the there is a weak convergence of the GAN output distribution to the objective function.
+
 \bibliographystyle{ieeetr}
 \bibliography{references} 
 \end{document} 
