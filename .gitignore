@@ -1,2 +1,5 @@
 .python-version
 data/**
+*.aux
+*.log
+*.out
