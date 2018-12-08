@@ -3,3 +3,5 @@ data/**
 *.aux
 *.log
 *.out
+*.bbl
+*.blg
