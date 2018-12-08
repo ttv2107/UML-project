@@ -1,2 +1,7 @@
 .python-version
 data/**
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
