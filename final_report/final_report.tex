@@ -75,9 +75,9 @@
 
 \begin{abstract}
   In this paper we address the problem of detecting and recognizing specific objects (such as the faces of a specific group of people)
-  in real life videos. By using unsupervised clustering techniques, we are able to exploit the inter-frame relationships in the 
+  in real life videos. By using unsupervised clustering techniques, we are able to exploit the inter-frame relationships in the
   video to significantly improve the accuracy of basic object detection and recognition algorithms. This yields results which are
-  also much more robust to frame switches, lengthy occlusions, and variable numbers of targeted objects leaving and reentering the frames 
+  also much more robust to frame switches, lengthy occlusions, and variable numbers of targeted objects leaving and reentering the frames
   (all common occurrences in real life videos) than standard tracking techniques.
 \end{abstract}
 
@@ -91,23 +91,23 @@
 
 One of the most interesting and difficult problems in computer vision is that of recognizing and then tracking an
 entity of interest over time (i.e. in videos). This can be useful for surveillance of suspect individuals,
-analysis of video data (music videos, concerts, sports games, etc.), or in building robots that interact with their 
-environment. 
+analysis of video data (music videos, concerts, sports games, etc.), or in building robots that interact with their
+environment.
 
 While tracking is a topic that has been extensively studied (see \cite{benchmarksurvey}), it is usually
-done so in isolation from recognition. To track the object of interest, the leading tracking algorithms mainly rely on 
+done so in isolation from recognition. To track the object of interest, the leading tracking algorithms mainly rely on
 properties of videos, notably that tracking target(s)
 will move by small amounts at a time. This allows the algorithms to detect/infer the object(s) positions from the previous ones by
-focusing on the region around the previously known position. While, these methods can work remarkably well on a clean video, such techniques have 
+focusing on the region around the previously known position. While, these methods can work remarkably well on a clean video, such techniques have
 little hope when faced with long occlusions or frequent ``frame switches'' as these will cause a violation of the assumptions that the algorithms are based on.
 
 Alternatively, object detection techniques could be applied frame by frame. This would result in a much more robust result since the algorithms
-make no assumptions concerning the relations between different frames. Hence, occlusions and frame switches pose no issue whatsoever. Unfortunately, even 
+make no assumptions concerning the relations between different frames. Hence, occlusions and frame switches pose no issue whatsoever. Unfortunately, even
 the best of these methods result in relatively noisy or inaccurate results when compared with the tracking algorithms. This can be attributed to the fact that the detection
 algorithms make no use of the wealth of information provided by the inter frame relationships (notably that most objects will usually not move by a large distance).
 
-In this paper we propose a novel post-processing method, based on unsupervised clustering techniques, to ``denoise'' results obtained 
-from object detection algorithms by exploiting inter-frame relationships. The result is a technique that is more robust to occlusions and frame switches than the standard 
+In this paper we propose a novel post-processing method, based on unsupervised clustering techniques, to ``denoise'' results obtained
+from object detection algorithms by exploiting inter-frame relationships. The result is a technique that is more robust to occlusions and frame switches than the standard
 tracking techniques and more accurate (less noisy) than the results obtained by naively applying object detection algorithms. We also have the added benefit of being able to easily
 do object recognition at the same time as detection. Our method will not only reduce the noise in the detection error (bad bounding boxes) but also in the classification error (bad labels).
 
@@ -116,21 +116,70 @@ do object recognition at the same time as detection. Our method will not only re
 
 As mentioned in survey \cite{benchmarksurvey}.
 
+One of the most popular methods for tracking is MILtrack \cite{miltrack}. This
+method uses multiple instance learning to track the object. To understand
+why we need multiple instance learning, consider the following approach for tracking.
+Given a location of the object in the last frame, we want to estimate the next location
+of the object in the current frame. A way to do this is to use image patches of the object
+itself and a neighborhood around it as positive examples, and image patches of
+the background surrounding the object as negative examples. An issue that arises
+here is that it is ambiguous how to define an object: a precise bounding box seems
+to restrictive, and furthermore, if an object is a person, then they might be sitting,
+standing, etc. Multiple instance learning provides the solution to this problem
+by providing the positive examples as a bag of image patches instead of a
+single image patch. Then we can compute features for the patches and then
+use a classifier to learn the object. In the case of the \cite{miltrack},
+the classifier was a variant of AdaBoost used over Haar-like features. An online
+variant of the MILtrack algorithm can be found in \cite{miltrackonline}.
 
-\cite{miltrack} % trung
 \cite{OLB} % alex
 \cite{IVT} % alex
 \cite{L1} % alex
-\cite{TLD} % trung
+
+Another method for tracking is TLD (Tracking-Learning-Detection) \cite{TLD}. This
+method combines both tracking and detection into one single, unified framework.
+In this model, both tracking and detection output their predicted bounding boxes
+separately, and an integrator updates the location of the object based on
+predictions from both of these models. Furthermore, at each step, the model
+also utilizes a P-expert, which identifies false negatives, and an N-expert,
+which identifies false positives. The P-expert relies on the assumption
+that location does not change much from frame to frame to identify false negatives,
+while the N-expert relies on the assumption that an object only appears at
+a single location at a time to identify false positives. The detection model
+is updated at each time step according to the examples generated by the P-expert and
+the N-expert.
 
 \newpage
 
 \section{Standard object detection and recognition methods}
-% Face net or MTCNN
-% Nice because frame by frame, hence doesnt assume relationships, hence more robust
-% BUT noisy and no coherent entity
 
-% Trung (get some papers too)
+Traditionally, the task of object detection has been carried out training
+discriminative models (AdaBoost or SVM) over manually-engineered features (Histogram of Oriented Gradients (HOG) \cite{hog}
+or Haar-like \cite{haar}). These methods have achieved certain successes, but
+are often computationally heavy and inaccurate.
+
+Recently, methods using neural networks have emerged. These methods apply neural
+networks, which are computationally expensive to train but have incredible
+expressive capabilities, to object detection task. Methods such as
+R-CNN \cite{rcnn} or YOLO \cite{yolo} have produced state-of-the-art result
+in object detection.
+
+Our paper will focus on face detection, and will employ a popular recent
+method in face detection \cite{mtcnn}. This method uses a multi-task CNN
+that splits the detection task into 3 phases: the first phase comes up with
+proposed face regions, the second phase refines the suggestions from the
+first phase, and the third phase detects facial landmarks (eyes, noses, lips, etc.).
+The multi-task component of these neural networks stem from the fact that
+all three networks are forced to output 3 things: 1) bounding boxes, 2) whether
+those bounding boxes are faces, and 3) the facial landmarks on the detected
+face.
+
+This object detection method provides another method to face-tracking. One can
+just detect the faces frame-by-frame. This does not force any assumptions on
+the model (as opposed to tracking model, where the object is often assumed to
+be visible at all times or move "slowly"). The issue, however, is that we
+need to connect these noisy objects detected on a frame-by-frame basis into
+a coherent entity that exists intertemporally.
 
 \section{Our method: using clustering to exploit video structure in order to denoise detection and recognition methods}
 
