@@ -43,7 +43,7 @@ def main(args):
     detector = MTCNN()
     with open(args.classifier_path, 'rb') as infile:
         (face_classifier, class_names) = pickle.load(infile)
-
+    print(class_names)
     with tf.Graph().as_default(), tf.Session() as sess, open(args.csv_path, 'w', newline='\n') as csvfile:
             # Get input and output tensors
             facenet.load_model(args.nn_path)
