@@ -11,7 +11,9 @@ FONT = cv2.FONT_HERSHEY_PLAIN
 FONT_SCALE              = 2
 FONT_COLOR              = (255,0,0)
 
-bigbang = ['daesung','gdragon','seungri','taeyang','TOP']
+
+group = ['daesung','gdragon','seungri','taeyang','TOP']
+n_people = len(group)
 
 def ensure(val, max_val):
     # Just to make sure in case coordinates are returned as negative or if
@@ -41,17 +43,29 @@ def main(args):
     i = 0
     boxes = np.loadtxt(args.csv_path, skiprows = 1, delimiter = ',', dtype = int)
 
-    X = boxes[:,0:5]
+    #performing DBSCAN on the examples
+    X = boxes[:,0:3]
     X = StandardScaler().fit_transform(X)
-
-    db = DBSCAN(eps = 0.5, min_samples = 4).fit(X)
+    for k in range(len(boxes)):
+        X[k][0] *= 3
+    db = DBSCAN(eps = 0.3, min_samples = 5).fit(X)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
 
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-    n_noise_ = list(labels).count(-1)
+    #n_noise_ = list(labels).count(-1)
+
+    # Each label does majority vote
+    votes = np.zeros((n_clusters_,n_people))
+    for k in range(len(boxes)):
+        if labels[k] != -1:
+            votes[labels[k]][boxes[k][5]] += 1
+
+    winners = np.ones(n_clusters_, dtype = int)*-1
+    for k in range(n_clusters_):
+        winners[k] = np.argmax(votes[k])
 
     first_box = 0
     while (cap.isOpened()):
@@ -65,7 +79,7 @@ def main(args):
             u_y = boxes[first_box][3]
             b_y = boxes[first_box][4]
 
-            class_txt = str(labels[first_box]) + bigbang[boxes[first_box][5]]
+            class_txt = str(labels[first_box]) + group[winners[labels[first_box]]]
             # Put bounding box and text onto video
             cv2.putText(frame, class_txt, (l_x, b_y), FONT, FONT_SCALE, FONT_COLOR)
             cv2.rectangle(frame, (l_x,u_y), (r_x, b_y), (0, 255, 0), 2)
