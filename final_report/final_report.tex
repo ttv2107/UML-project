@@ -120,14 +120,32 @@ the main tracking algorithms used in practice and show that they rely on core as
 when faced with real life videos which contain frame switches, long occlusions, and various target objects coming in and out 
 of the frames in variable number. In the presence of these realities, we show that these tracking algorithms are unusable.
 
-As mentioned in \cite{benchmarksurvey}, the most commonly used tracking algorithms are OLB \cite{OLB},IVT \cite{IVT}, MIL \cite{miltrack}, L1 \cite{L1}, and TLD \cite{TLD}.
+As mentioned in \cite{benchmarksurvey}, the most commonly used tracking algorithms are OLB \cite{OLB}, IVT \cite{IVT}, MIL \cite{miltrack}, L1 \cite{L1}, and TLD \cite{TLD}.
 We give a quick summary of each and outline their main issue in our context.
+
+OLB or tracking via on-line boosting is a tracking method described in \cite{OLB} which takes the most basic approach to tracking and use Adaboost to achieve better performance.
+The core basic approach, which most of these other methods also include in some way, is to use a classifier to evaluate many possible regions surrounding the previously known location of the object.
+This creates a confidence map which is then analyzed to find the most probable current position of the object. Finally, the classifier is retrained on the new position as well as the previous ones.
+The addition of OLB is to have many different trackers (classifiers), view them as weak learners, and use Adaboost to obtain a classifier with a much better performance by aggregating the weak learners.
+Clearly, this method has the drawback we mentioned earlier. Since it retrains every frame, long occlusions can completely wreck the classifier. Even more problematically, the tracker needs to be given the
+initial position of the object. This means that handling frame switches or new objects coming in and out will be very problematic. Even, if adhoc techniques are used to detect frame switches, the algorithm
+would still need to somehow get the objects' new initial position. Using object detection techniques to find these is dangerous since these techniques are fairly noisy and giving a bad initial position would
+be disastrous (since all the subsequent positions will be found based on that first position).
+
+Incremental learning for robust visual tracking is a technique described in \cite{IVT} which is more robust to changes in the objects' appearance or illumination. By efficiently doing only incremental updates 
+on a learned eigenbasis as new observations come in, the resulting classifier is more robust to unexpected changes in appearance and lighting. However, this does nothing to build robustness against the problems
+we are interested in in our setting. As for OLB, the algorithm works by looking at locations close to the previous position. The algorithm also requires being given the initial position of the 
+object being tracked, which again can be very problematic.
+
+Another method, robust visual tracking via $\ell_1$ minimization (\cite{L1}), does try to deal with the problem of occlusions. The idea is to have a set of templates. Some, target templates, contain the target
+object. Others, trivial templates, are simply templates with a single nonzero element. Then the idea is to try to represent the target candidate as a sparse linear combination of templates. Clean versions of the 
+target object should be sparsely captured by a few target templates while occlusions should be captured by a sparse number of trivial templates. This allows occlusions to be dealt with naturally and without
+damaging the classifier (the target templates won't be corrupted nor added to when occlusions happen). The method also uses a particle filter technique to estimate and propagate the posterior distribution
+over the motion of the object over time. This allows selecting the target candidate that is then matched to templates. However, this means that large movements as caused in frame switches can cause massive
+problems for this method. Having objects go in and out of the frame can also be a major issue as initial templates need to be provided each time.
 
 
 \cite{miltrack} % trung
-\cite{OLB} % alex
-\cite{IVT} % alex
-\cite{L1} % alex
 \cite{TLD} % trung
 
 
