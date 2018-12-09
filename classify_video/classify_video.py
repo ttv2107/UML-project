@@ -11,7 +11,7 @@ import numpy as np
 
 CROPPED_RESIZE = (160, 160)
 FONT = cv2.FONT_HERSHEY_PLAIN
-FONT_SCALE              = 1
+FONT_SCALE              = 2
 FONT_COLOR              = (255,255,255)
 
 def ensure(val, max_val):
@@ -28,8 +28,13 @@ def main(args):
     # Setup video stream
     cap = cv2.VideoCapture(args.input_video_path)
     in_fps, in_4cc = int(cap.get(cv2.CAP_PROP_FPS)), int(cap.get(cv2.CAP_PROP_FOURCC))
+
+#CHANGE: in_fps lowered to make classification faster
+    in_fps = 5
     in_width, in_height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     in_nframes = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+#output fps is also changed
     out = cv2.VideoWriter(args.output_video_path, in_4cc, in_fps, (in_width, in_height))
     if (cap.isOpened()==False):
         print('Error opening video stream or file')
@@ -89,7 +94,7 @@ def main(args):
                     # Write to csv
                     writer.writerow({'frame': i, 'left_x': left_x, 'right_x': right_x,
                                      'top_y': top_y, 'bottom_y': bottom_y,
-                                     'label': best_class_indices[0]})
+                                     'label': best_class_indices[0],'conf': best_class_probabilities[0]})
 
                 out.write(frame)
                 i += 1
