@@ -88,8 +88,8 @@ def main(args):
                     class_txt = '{}: {:.3f}'.format(class_names[best_class_indices[0]], best_class_probabilities[0])
 
                     # Put bounding box and text onto video
-                    cv2.putText(frame, class_txt, (x, y+h), FONT, FONT_SCALE, FONT_COLOR)
-                    cv2.rectangle(frame, (x,y), (x+w, y+h), (0, 255, 0), 2)
+                    cv2.putText(frame, class_txt, (left_x, bottom_y), FONT, FONT_SCALE, FONT_COLOR)
+                    cv2.rectangle(frame, (left_x,top_y), (right_x, bottom_y), (0, 255, 0), 2)
 
                     # Write to csv
                     writer.writerow({'frame': i, 'left_x': left_x, 'right_x': right_x,
