@@ -31,7 +31,7 @@ Our raw data (the images on which the neural net was trained, the neural net par
 are all in the `data/` folder. However, due to the very large number of files in this folder we do NOT
 store it directly on Github. Instead, we zip it and store the `data.zip` file using `git lfs`. To 
 retrieve the `data/` folder, first make sure your repo is up to date (do a `git pull`) and then simply
-run `make getdata`, this will automatically unzip `data.zip` and create the `data/` folder.
+run ```make getdata```, this will automatically unzip `data.zip` and create the `data/` folder.
 
 ### Code requirements
 For the code to work, please make sure you are running `python 3.6` and install the python packages 
