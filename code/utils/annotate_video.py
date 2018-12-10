@@ -36,7 +36,7 @@ def main(args):
         print('Error opening video stream or file')
 
     i = 0
-    boxes = np.loadtxt(args.csv_path, skiprows = 1, delimiter = ',', dtype = int)
+    boxes = np.loadtxt(args.csv_path, skiprows = 1, delimiter = ',', dtype = int, usecols = range(6))
     first_box = 0
     while (cap.isOpened()):
         ret, frame = cap.read()
@@ -51,8 +51,8 @@ def main(args):
 
             class_txt = bigbang[boxes[first_box][5]]
             # Put bounding box and text onto video
-            cv2.putText(frame, class_txt, (l_x, b_y), FONT, FONT_SCALE, FONT_COLOR)
-            cv2.rectangle(frame, (l_x,u_y), (r_x, b_y), (0, 255, 0), 2)
+            cv2.putText(frame, class_txt, (l_x, b_y), FONT, FONT_SCALE, FONT_COLOR, 3)
+            cv2.rectangle(frame, (l_x,u_y), (r_x, b_y), (255,0, 0), 3)
             first_box += 1
         out.write(frame)
         i += 1

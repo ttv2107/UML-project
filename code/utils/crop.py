@@ -38,7 +38,8 @@ def main(args):
         print('Error opening video stream or file')
 
     #open input csv
-    boxes = np.loadtxt(args.input_csv_path, skiprows = 1, delimiter = ',', dtype = int)
+    boxes = np.loadtxt(args.input_csv_path, skiprows = 1, delimiter = ',', dtype = int, usecols = range(6))
+    confs = np.loadtxt(args.input_csv_path, skiprows = 1, delimiter = ',',  usecols = 6)
     first_box = 0
     #shift first_box index to first valid occurrence
     while boxes[first_box][0] < args.start_frame:
@@ -46,13 +47,13 @@ def main(args):
 
     #open output csv
     outcsv = open(args.output_csv_path, 'w', newline = '\n')
-    fieldnames = ['frame','left_x','right_x','top_y','bottom_y', 'label']
+    fieldnames = ['frame','left_x','right_x','top_y','bottom_y', 'label', 'conf']
     writer = csv.DictWriter(outcsv, fieldnames = fieldnames)
     writer.writeheader()
 
     #write to output csv
     while boxes[first_box][0] < args.end_frame:
-        writer.writerow({'frame': boxes[first_box][0] - args.start_frame, 'left_x': boxes[first_box][1], 'right_x': boxes[first_box][2],'top_y': boxes[first_box][3], 'bottom_y': boxes[first_box][4],'label':boxes[first_box][5]})
+        writer.writerow({'frame': boxes[first_box][0] - args.start_frame, 'left_x': boxes[first_box][1], 'right_x': boxes[first_box][2],'top_y': boxes[first_box][3], 'bottom_y': boxes[first_box][4],'label':boxes[first_box][5], 'conf':confs[first_box]})
         first_box += 1
     outcsv.close()
 
