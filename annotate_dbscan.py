@@ -12,7 +12,7 @@ FONT_SCALE              = 2
 FONT_COLOR              = (255,0,0)
 
 
-group = ['daesung','gdragon','seungri','taeyang','TOP']
+group = ['daesung','gdragon','seungri','taeyang','top']
 n_people = len(group)
 
 def ensure(val, max_val):
@@ -40,7 +40,6 @@ def main(args):
     if (cap.isOpened()==False):
         print('Error opening video stream or file')
 
-    i = 0
     boxes = np.loadtxt(args.csv_path, skiprows = 1, delimiter = ',', dtype = int)
 
     #performing DBSCAN on the examples
@@ -73,6 +72,7 @@ def main(args):
         winners[k] = np.argmax(votes[k])
 
     first_box = 0
+    i = 0
     while (cap.isOpened()):
         ret, frame = cap.read()
         if not ret:
@@ -84,25 +84,25 @@ def main(args):
             u_y = boxes[first_box][3]
             b_y = boxes[first_box][4]
 
-            class_txt = str(labels[first_box]) + group[winners[labels[first_box]]]
-            # Put bounding box and text onto video
-            cv2.putText(frame, class_txt, (l_x, b_y), FONT, FONT_SCALE, FONT_COLOR)
-            cv2.rectangle(frame, (l_x,u_y), (r_x, b_y), (0, 255, 0), 2)
+            if labels[first_box] != -1:
+                class_txt = str(labels[first_box]) + group[winners[labels[first_box]]]
+                # Put bounding box and text onto video
+                cv2.putText(frame, class_txt, (l_x, b_y), FONT, FONT_SCALE, FONT_COLOR)
+                cv2.rectangle(frame, (l_x,u_y), (r_x, b_y), (0, 255, 0), 2)
             first_box += 1
         out.write(frame)
         i += 1
         if (i % 100 == 0):
             print('Processing frame {}/{}...'.format(i, in_nframes))
 
-
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('input_video_path', type=str, help='Path to the input video.')
     parser.add_argument('output_video_path', type=str, help='Path to the output video.')
+    parser.add_argument('csv_path', type=str, help='Path to the csv containing the noisy bounding boxes and labels.')
 #    parser.add_argument('classifier_path', type=str, help='Path to the classifier pkl.')
 #    parser.add_argument('nn_path', type=str, help='Path to the nn model that produces embedding.')
-    parser.add_argument('csv_path', type=str, help='Path to which to write the csv containing bounding boxes and labels.')
     return parser.parse_args(argv)
 
 if __name__ == '__main__':

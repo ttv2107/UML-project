@@ -8,7 +8,7 @@ FONT = cv2.FONT_HERSHEY_PLAIN
 FONT_SCALE              = 2
 FONT_COLOR              = (255,0,0)
 
-bigbang = ['daesung','gdragon','seungri','taeyang','TOP']
+bigbang = ['daesung','gdragon','seungri','taeyang','top']
 
 def ensure(val, max_val):
     # Just to make sure in case coordinates are returned as negative or if
@@ -65,9 +65,9 @@ def parse_arguments(argv):
 
     parser.add_argument('input_video_path', type=str, help='Path to the input video.')
     parser.add_argument('output_video_path', type=str, help='Path to the output video.')
+    parser.add_argument('csv_path', type=str, help='Path to the csv containing the noisy bounding boxes and labels.')
 #    parser.add_argument('classifier_path', type=str, help='Path to the classifier pkl.')
 #    parser.add_argument('nn_path', type=str, help='Path to the nn model that produces embedding.')
-    parser.add_argument('csv_path', type=str, help='Path to which to write the csv containing bounding boxes and labels.')
     return parser.parse_args(argv)
 
 if __name__ == '__main__':
