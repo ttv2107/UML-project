@@ -62,6 +62,8 @@ def main(args):
     #n_noise_ = list(labels).count(-1)
 
     # Each label does majority vote
+    # Group frames using indices
+
     votes = np.zeros((n_clusters_,n_people))
     for k in range(len(boxes)):
         if labels[k] != -1:
@@ -70,6 +72,35 @@ def main(args):
     winners = np.ones(n_clusters_, dtype = int)*-1
     for k in range(n_clusters_):
         winners[k] = np.argmax(votes[k])
+
+    shots = []
+    newbox = []
+    for k in range(len(boxes)):
+        if labels[k] != -1:
+            if labels[k] > len(shots) - 1:
+                shots.append([])
+
+            #shots[labels[k]].append(np.concatenate((boxes[k,0:5], np.array([winners[labels[k]]]))))
+            boxes[k][5] = winners[labels[k]]
+            newbox.append(np.append(boxes[k],np.array(labels[k])))
+            shots[labels[k]].append(newbox[-1])
+        else:
+            boxes[k][5] = -1
+            newbox.append(np.append(boxes[k],np.array(labels[k])))
+        if(k % 100 == 0):
+            print(len(boxes[k]))
+
+
+    for shot in shots:
+        if len(shot) > 1:
+            for k in range(len(shot)-1):
+                if shot[k+1][0] - shot[k][0] > 1:
+                    gap = shot[k+1][0] - shot[k][0]
+                    for j in range(1, gap):
+                        newbox.append(np.array((j * shot[k+1] + (gap - j) * shot[k])/gap, dtype = int))
+    newbox = np.array(newbox)
+    boxes = newbox[newbox[:,0].argsort()]
+
 
     first_box = 0
     i = 0
@@ -84,8 +115,8 @@ def main(args):
             u_y = boxes[first_box][3]
             b_y = boxes[first_box][4]
 
-            if labels[first_box] != -1:
-                class_txt = str(labels[first_box]) + group[winners[labels[first_box]]]
+            if boxes[first_box][6] != -1:
+                class_txt = str(boxes[first_box][6]) + group[boxes[first_box][5]]
                 # Put bounding box and text onto video
                 cv2.putText(frame, class_txt, (l_x, b_y), FONT, FONT_SCALE, FONT_COLOR)
                 cv2.rectangle(frame, (l_x,u_y), (r_x, b_y), (0, 255, 0), 2)
