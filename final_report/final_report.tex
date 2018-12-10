@@ -280,7 +280,23 @@ where $\alpha = \frac{f_1-f}{f_1 - f_0}$. Again this simply relies on the fact t
 \section{Experiments and Results}
 Despite the simplicity of our post processing method, we observe vast improvements over the initial output from the detection/recognition algorithms.
 
+\section{Conclusion}
+We have given a simple and efficient algorithm for post-processing the output of running frame by frame detection and recognition algorithms on videos. Our algorithm makes
+relatively limited assumptions on the inter frame structure when compared to tracking algorithms. This allows our algorithm to robustly handle frame switches, long occlusions, and
+target objects coming in and out of the video. Additionally, by exploiting the video structure we are able to get very clean labels and bounding boxes, much cleaner than what is 
+returned directly by the 
+detection/recognition algorithms.
+
+In future work, various directions could be explored to improve this algorithm. Most notably the third and fourth steps could be improved. For the merging of similar clusters it would be good 
+to develop more technical and robust ways of doing this. Techniques of hierarchical clustering or running DBSCAN with various different sets of parameters could be explored. For the fourth step, 
+better models could be devised than the linear one. Some sort of particle motion model which would take into account velocity could give better results. Alternatively, looking at detection confidence in 
+regions selected by the linear or alternative motion models could help locate the face more accurately. Finally, replacing MTCNN with an online detection/recognition algorithm could allow for interesting
+modifications to our algorithm with the goal of making it work online.
+
 \subsubsection*{Acknowledgments}
+
+We thank Professor Verma as well as the TAs and students of the Fall 2018 Topics in Unsupervised Learning class for having provided us the opportunity 
+and the ideas necessary in the creation of this work.
 
 \section*{References}
 
