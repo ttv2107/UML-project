@@ -44,7 +44,12 @@ def main(args):
     boxes = np.loadtxt(args.csv_path, skiprows = 1, delimiter = ',', dtype = int)
 
     #performing DBSCAN on the examples
-    X = boxes[:,0:3]
+    X = np.zeros((len(boxes),3))
+    for k in range(len(boxes)):
+        X[k][0] = boxes[k][0]
+        X[k][1] = (boxes[k][1] + boxes[k][2])/2.0
+        X[k][2] = (boxes[k][3] + boxes[k][4])/2.0
+
     X = StandardScaler().fit_transform(X)
     for k in range(len(boxes)):
         X[k][0] *= 3

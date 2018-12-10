@@ -30,7 +30,7 @@ def main(args):
     in_fps, in_4cc = int(cap.get(cv2.CAP_PROP_FPS)), int(cap.get(cv2.CAP_PROP_FOURCC))
 
 #CHANGE: in_fps lowered to make classification faster
-    in_fps = 5
+#    in_fps = 5
     in_width, in_height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     in_nframes = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
@@ -53,7 +53,7 @@ def main(args):
             embedding_size = embeddings.get_shape()[1]
 
             # Prepare csv file for writing
-            fieldnames = ['frame', 'left_x', 'right_x', 'top_y', 'bottom_y', 'label']
+            fieldnames = ['frame', 'left_x', 'right_x', 'top_y', 'bottom_y', 'label','conf']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
 
@@ -69,7 +69,7 @@ def main(args):
                     emb_array = np.zeros((1, embedding_size))
                     x, y, w, h = face['box']
                     left_x, right_x = ensure(x, in_width), ensure(x+w, in_width)
-                    top_y, bottom_y = ensure(y, in_height), ensure(y+w, in_height)
+                    top_y, bottom_y = ensure(y, in_height), ensure(y+h, in_height)
 
                     face_img = facenet.prewhiten(misc.imresize(frame[top_y:bottom_y, left_x:right_x, :],
                                                                CROPPED_RESIZE,
