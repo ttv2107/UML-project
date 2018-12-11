@@ -1,8 +1,8 @@
 # Denoising Face Recognition via DBSCAN
 ## Authors
-Trung Vu
-Sihyun Lee
-Alexandre Lamy
+- Trung Vu
+- Sihyun Lee
+- Alexandre Lamy
 
 ## Introduction
 This is the Github repo for the Denoising Face Recognition via DBSCAN project that we worked on for 
