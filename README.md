@@ -10,7 +10,17 @@ the class COMS 4995: Methods in Unsupervised Learning (Fall 2018). It contains t
 that we used as well as the results we obtained. It also has our final poster and writeup.
 
 ## Viewing poster, report, and results
-The poster is the file `final_poster.pdf`, the final report is the file `final_report/final_report.pdf`. Results can all be found in the `results/` folder.
+The poster is the file `final_poster.pdf`, the final report is the file `final_report/final_report.pdf`. Results can all be found in the `results/` folder. Here is a short table describing each of the 
+videos:
+
+| Video File        | Description     | 
+| ------------- |-------------| 
+| [BIGBANG](./results/BIGBANG.mp4)      | Full original video | 
+| [BIGBANG_ANN](./results/BIGBANG_ANN.mp4)      | Full original video with detection/recognition bounding boxes | 
+| [BIGBANG_DBSCAN](./results/BIGBANG_DBSCAN.mp4)      | Full original video with cleaned bounding boxes (after post processing by our algorithm) | 
+| [BIGBANG_CROP](./results/BIGBANG_CROP.mp4)      | Most interesting portion of full video | 
+| [BIGBANG_CROP_ANN](./results/BIGBANG_CROP_ANN.mp4)      | Most interesting portion of full video with detection/recognition bounding boxes | 
+| [BIGBANG_CROP_DBSCAN](./results/BIGBANG_CROP_DBSCAN.mp4)      | Most interesting portion of full video with cleaned bounding boxes (after post processing by our algorithm) | 
 
 ## Getting data and running the code
 ### Cloning this repo
