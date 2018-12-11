@@ -18,6 +18,7 @@
 % to avoid loading the natbib package, add option nonatbib:
 %     \usepackage[nonatbib]{neurips_2018}
 
+
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage{hyperref}       % hyperlinks
@@ -26,6 +27,10 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
+\usepackage{graphicx}
+
+\graphicspath{{./images/}}
+
 
 \title{Denoising face recognition via clustering techniques}
 
@@ -278,7 +283,36 @@ $(f_1, x_1, y_1, h_1, w_1)$. Then the bounding box of frame $f$ can be estimated
 where $\alpha = \frac{f_1-f}{f_1 - f_0}$. Again this simply relies on the fact that within a coherent movement the frame by frame movement should be small and relatively constant over a short period of time.
 
 \section{Experiments and Results}
-Despite the simplicity of our post processing method, we observe vast improvements over the initial output from the detection/recognition algorithms.
+Despite the simplicity of our post processing method, we observe vast improvements over the initial output from the detection/recognition algorithms. We tested our algorithm on
+the music video ``Love Song'' by the K-pop group Big Bang. The video has five different people that constantly come in and out of the video. 
+There are also multiple periods of occlusions. These properties made the 
+video an ideal test subject. 
+
+Figures \ref{figure:denoise}, \ref{figure:labels}, and \ref{figure:linear-interpolation} show some of the improvements that our algorithm leads to. 
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{denoise.jpg}
+\caption{Example of removal of bad bounding boxes. Initial frames and bounding boxes (top) and bounding box changes made by our algorithm (bottom). }
+\label{figure:denoise}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{labels.jpg}
+\caption{Example of label denoising. Initial frames and bounding boxes (top) and bounding box changes made by our algorithm (bottom). }
+\label{figure:labels}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{linear-interpolation.jpg}
+\caption{Example of linear interpolation of missing bounding boxes. Initial frames and bounding boxes (top) and bounding box changes made by our algorithm (bottom). }
+\label{figure:linear-interpolation}
+\end{figure}
+
+Numerically, we found that 93\% of the clusters were correctly labeled, 6\% of the final bounding boxes were added in by our algorithm (linear interpolation), and 29\% of the final bounding boxes have
+labels which were either corrected or inferred by our algorithm. More complete results and the full videos can be found at the project's Github page \footnote{\url{https://github.com/ttv2107/UML-project}}.
 
 \section{Conclusion}
 We have given a simple and efficient algorithm for post-processing the output of running frame by frame detection and recognition algorithms on videos. Our algorithm makes
@@ -298,8 +332,7 @@ modifications to our algorithm with the goal of making it work online.
 We thank Professor Verma as well as the TAs and students of the Fall 2018 Topics in Unsupervised Learning class for having provided us the opportunity 
 and the ideas necessary in the creation of this work.
 
-\section*{References}
-
+\newpage
 \bibliographystyle{unsrt}
 \bibliography{final_report}
 
