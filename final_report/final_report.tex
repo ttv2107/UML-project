@@ -32,7 +32,7 @@
 \graphicspath{{./images/}}
 
 
-\title{Denoising face recognition via clustering techniques}
+\title{Denoising face recognition via DBSCAN}
 
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -252,9 +252,9 @@ DBSCAN automatically handles ``noise points'' which do not belong to any reasona
 with low dimensional data and DBSCAN is well known to empirically work quite well on such datasets.
 
 While choosing the parameters for DBSCAN can be tricky we were able to find good settings with little trouble.
-After preprocessing the data we found that running DBSCAN with 5 as the number of neighbors needed to be considered a core point and $\epsilon=0.3$ as
+After preprocessing the data we found that running DBSCAN with 4 as the number of neighbors needed to be considered a core point and $\epsilon=0.7$ as
 the max distance to be considered a neighbor worked particularly well. The preprocessing simply involved zscoring the $x$ and $y$ coordinates of the bounding boxes
-and multiplying the frame coordinate by $\epsilon / \text{FPS}$ (where FPS is the number of frames per second) which has the effect of making potential neighbors all be within one
+and multiplying the frame coordinate by $\frac{\text{\# of frames}}{\text{FPS}}$ (where FPS is the number of frames per second) which has the effect of making potential neighbors all be within one
 second of each other.
 
 \subsection{Labeling the clusters through majority voting}
